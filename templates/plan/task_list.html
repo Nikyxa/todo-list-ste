@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>
+      TODO list
+    <a href="{% url 'plan:task-create' %}" class="float-right btn btn-primary">Add task</a>
+    </h1>
+<hr>
+
+    <div class="ml-3">
+
+    {% if task_list %}
+    {% for task in task_list %}
+
+      <h4>
+        <strong>
+        {{ task.content }}
+        {% if task.is_done %}
+          <span style="color: forestgreen">Done</span>
+          <a href="{% url 'plan:toggle-assign' pk=task.id %}" class="float-right btn btn-secondary">
+            Undo
+          </a>
+          {% else %}
+          <span style="color: red">Not Done</span>
+          <a href="{% url 'plan:toggle-assign' pk=task.id %}" class="float-right btn btn-success">
+            Complete
+          </a>
+        {% endif %}
+        </strong>
+      </h4>
+
+      <p><strong>Created:</strong> {{ task.creation }}
+      {% if task.deadline %}
+        Deadline: {{ task.deadline }}
+      {% endif %}
+      </p>
+
+      <p class="text-muted"><strong>Tags:</strong>
+      {% for tag in task.tags.all %}
+        {{ tag.name }}
+      {% endfor %}
+      <a href="{% url 'plan:task-update' pk=task.id %}">
+                Update
+      </a>
+      <a href="{% url 'plan:task-delete' pk=task.id %}">
+                Delete
+      </a>
+      </p>
+
+      <hr>
+    {% endfor %}
+
+    {% endif %}
+  </div>
+{% endblock %}
